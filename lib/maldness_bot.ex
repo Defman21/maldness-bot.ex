@@ -1,0 +1,2 @@
+defmodule MaldnessBot do
+end
