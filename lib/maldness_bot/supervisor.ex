@@ -9,7 +9,9 @@ defmodule MaldnessBot.Supervisor do
   def init(:ok) do
     children = [
       MaldnessBot.Registry,
-      MaldnessBot.Updates.Supervisor
+      MaldnessBot.Updates.Supervisor,
+      {Finch, name: MaldnessBot.Finch},
+      MaldnessBot.TelegramAPI.API
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
