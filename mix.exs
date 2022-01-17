@@ -24,7 +24,8 @@ defmodule MaldnessBot.MixProject do
     [
       {:finch, "~> 0.9"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
     ]
   end
 end
