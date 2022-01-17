@@ -1,23 +1,16 @@
 defmodule MaldnessBot.Updates.Webhook do
+  require Logger
   use Plug.Router
 
   plug(:match)
+  plug(Plug.Parsers, parsers: [:json], json_decoder: Jason)
   plug(:dispatch)
 
-  get "/:chat_id/:id" do
-    upd = %{
-      id: id,
-      chat_id: chat_id
-    }
-
-    MaldnessBot.Updates.Server.handle_update(upd)
-
-    conn
-    |> put_resp_content_type("application/json")
-    |> send_resp(200, Jason.encode!(%{ok: true, update: upd}))
-  end
-
-  match _ do
-    send_resp(conn, 404, "not found")
+  post "/" do
+    case MaldnessBot.Updates.Server.handle_update(conn.body_params) do
+      :ok -> send_resp(conn, 200, "OK")
+      {:error, "not an update"} -> send_resp(conn, 400, "not an update")
+      _ -> send_resp(conn, 500, "internal server error")
+    end
   end
 end

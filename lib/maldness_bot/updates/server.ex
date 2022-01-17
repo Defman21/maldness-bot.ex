@@ -12,11 +12,13 @@ defmodule MaldnessBot.Updates.Server do
     DynamicSupervisor.init(strategy: :one_for_one)
   end
 
-  def handle_update(update) do
-    update.chat_id
+  def handle_update(%{"update_id" => _} = update) do
+    update["chat"]["id"]
     |> get_worker_pid()
     |> Worker.handle_update(update)
   end
+
+  def handle_update(_), do: {:error, "not an update"}
 
   defp get_worker_pid(chat_id) do
     case DynamicSupervisor.start_child(__MODULE__, {Worker, chat_id}) do
