@@ -1,6 +1,7 @@
 defmodule MaldnessBot.Updates.Worker do
   require Logger
   use GenServer
+  alias MaldnessBot.Commands.Parser, as: CommandParser
 
   # Client API
 
@@ -20,7 +21,12 @@ defmodule MaldnessBot.Updates.Worker do
   end
 
   @impl GenServer
-  def handle_cast({:handle_update, _update}, state) do
+  def handle_cast({:handle_update, update}, state) do
+    Logger.info("update: #{inspect(update)}")
+    case CommandParser.parse_message(update["message"]) do
+      {:ok, _command} -> nil # todo
+      {:error, "no command in the message"} -> nil
+    end
     {:noreply, state}
   end
 
