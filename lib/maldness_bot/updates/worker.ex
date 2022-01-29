@@ -24,7 +24,8 @@ defmodule MaldnessBot.Updates.Worker do
   def handle_cast({:handle_update, update}, state) do
     Logger.info("update: #{inspect(update)}")
     case CommandParser.parse_message(update["message"]) do
-      {:ok, _command} -> nil # todo
+      {:ok, command, arg} ->
+        :ok = MaldnessBot.Commands.Executor.execute(command, arg, update)
       {:error, "no command in the message"} -> nil
     end
     {:noreply, state}
