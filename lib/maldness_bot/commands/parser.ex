@@ -10,16 +10,26 @@ defmodule MaldnessBot.Commands.Parser do
 
   defp is_command?(entity), do: entity["type"] == "bot_command"
 
+  @spec extract_arg(String.t(), pos_integer()) :: String.t() | nil
+  defp extract_arg(text, cmd_len) do
+    text_len = String.length(text)
+    case text_len == cmd_len do
+      true -> nil
+      false -> String.slice(text, cmd_len + 1, text_len - cmd_len)
+    end
+  end
+
   defp parse_command(text, length) do
     cmd = String.slice(text, 1, length - 1)
+    arg = extract_arg(text, length)
 
     case String.contains?(cmd, "@") do
       false ->
-        {:ok, cmd}
+        {:ok, cmd, arg}
 
       true ->
         bot_name = Application.fetch_env!(:maldness_bot, :name)
-        {:ok, String.slice(cmd, 0..(-String.length(bot_name) - 1))}
+        {:ok, String.slice(cmd, 0..(-String.length(bot_name) - 1)), arg}
     end
   end
 end
