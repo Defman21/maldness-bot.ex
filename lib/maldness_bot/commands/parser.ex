@@ -13,6 +13,7 @@ defmodule MaldnessBot.Commands.Parser do
   @spec extract_arg(String.t(), pos_integer()) :: String.t() | nil
   defp extract_arg(text, cmd_len) do
     text_len = String.length(text)
+
     case text_len == cmd_len do
       true -> nil
       false -> String.slice(text, cmd_len + 1, text_len - cmd_len)
