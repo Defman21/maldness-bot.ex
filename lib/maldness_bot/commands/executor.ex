@@ -1,6 +1,7 @@
 defmodule MaldnessBot.Commands.Executor do
   @commands %{
     "up" => MaldnessBot.Commands.Handlers.Up,
+    "weather" => MaldnessBot.Commands.Handlers.Weather
   }
 
   @spec execute(String.t(), String.t(), map()) :: :ok | {:error, binary()}
