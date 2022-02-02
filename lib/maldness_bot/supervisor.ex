@@ -8,6 +8,7 @@ defmodule MaldnessBot.Supervisor do
   @impl true
   def init(:ok) do
     children = [
+      {MaldnessBot.Repo, []},
       MaldnessBot.Registry,
       MaldnessBot.Updates.Supervisor,
       {Finch, name: MaldnessBot.Finch},
