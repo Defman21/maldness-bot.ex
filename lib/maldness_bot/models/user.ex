@@ -9,5 +9,7 @@ defmodule MaldnessBot.Models.User do
       field :first_name, :string
       field :last_name, :string
       field :username, :string
+
+      has_many :afk_events, MaldnessBot.Models.AfkEvent
   end
 end
