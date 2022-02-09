@@ -2,6 +2,7 @@ defmodule MaldnessBot.Updates.Worker do
   require Logger
   use GenServer
   alias MaldnessBot.Commands.Parser, as: CommandParser
+  alias MaldnessBot.AfkCache
 
   # Client API
 
@@ -21,6 +22,7 @@ defmodule MaldnessBot.Updates.Worker do
   end
 
   @impl GenServer
+  def handle_cast({:handle_update, %{"message" => %{"from" => %{"id" => user_id}} = message}}, state) do
   def handle_cast({:handle_update, %{"message" => message}}, state) do
 
     case CommandParser.parse_message(message) do
