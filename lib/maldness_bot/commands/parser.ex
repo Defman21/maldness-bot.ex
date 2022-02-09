@@ -8,6 +8,10 @@ defmodule MaldnessBot.Commands.Parser do
     end
   end
 
+  def parse_message(_) do
+    {:error, "no command in the message"}
+  end
+
   defp is_command?(entity), do: entity["type"] == "bot_command"
 
   @spec extract_arg(String.t(), pos_integer()) :: String.t() | nil
