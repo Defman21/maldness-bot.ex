@@ -23,7 +23,17 @@ defmodule MaldnessBot.Updates.Worker do
 
   @impl GenServer
   def handle_cast({:handle_update, %{"message" => %{"from" => %{"id" => user_id}} = message}}, state) do
-  def handle_cast({:handle_update, %{"message" => message}}, state) do
+    {:ok, _} = Task.Supervisor.start_child(MaldnessBot.UpdatesTaskSupervisor, fn ->
+      with event_id when is_integer(event_id) <- AfkCache.get(user_id) do
+        AfkCache.delete(user_id)
+        MaldnessBot.TelegramAPI.API.send_message(
+          message["chat"]["id"],
+          "afk ended for you",
+          reply_to_message_id: message["message_id"]
+        )
+        # todo: set ended_at for the event in DB
+      end
+    end)
 
     case CommandParser.parse_message(message) do
       {:ok, command, arg} ->
