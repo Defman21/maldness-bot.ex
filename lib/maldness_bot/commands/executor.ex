@@ -6,9 +6,9 @@ defmodule MaldnessBot.Commands.Executor do
   }
 
   @spec execute(String.t(), String.t(), map()) :: :ok | {:error, binary()}
-  def execute(command, arg, update) do
+  def execute(command, arg, message) do
     case Map.fetch(@commands, command) do
-      {:ok, handler} -> handler.handle(arg, update)
+      {:ok, handler} -> handler.handle(arg, message)
       :error -> {:error, "command not found"}
     end
   end

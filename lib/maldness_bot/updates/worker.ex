@@ -21,17 +21,22 @@ defmodule MaldnessBot.Updates.Worker do
   end
 
   @impl GenServer
-  def handle_cast({:handle_update, update}, state) do
-    Logger.info("update: #{inspect(update)}")
+  def handle_cast({:handle_update, %{"message" => message}}, state) do
 
-    case CommandParser.parse_message(update["message"]) do
+    case CommandParser.parse_message(message) do
       {:ok, command, arg} ->
-        :ok = MaldnessBot.Commands.Executor.execute(command, arg, update)
+        :ok = MaldnessBot.Commands.Executor.execute(command, arg, message)
 
       {:error, "no command in the message"} ->
         nil
     end
 
+    {:noreply, state}
+  end
+
+  @impl GenServer
+  def handle_cast({:handle_update, update}, state) do
+    Logger.debug("unhandled update: #{inspect(update)}")
     {:noreply, state}
   end
 
