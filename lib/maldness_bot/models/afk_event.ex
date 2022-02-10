@@ -28,4 +28,11 @@ defmodule MaldnessBot.Models.AfkEvent do
     |> cast(params, [:message, :started_at, :ended_at])
     |> validate_required([:message])
   end
+
+  @spec close(pos_integer()) :: :ok
+  def close(event_id) do
+    MaldnessBot.Repo.get!(__MODULE__, event_id)
+    |> changeset(%{ended_at: DateTime.utc_now() |> DateTime.truncate(:second)})
+    |> MaldnessBot.Repo.update!()
+  end
 end
