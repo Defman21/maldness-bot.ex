@@ -7,7 +7,8 @@ defmodule MaldnessBot.MixProject do
       version: "0.1.0",
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      compilers: [:gettext] ++ Mix.compilers()
     ]
   end
 
@@ -28,6 +29,7 @@ defmodule MaldnessBot.MixProject do
       {:ecto, "~> 3.7"},
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
+      {:gettext, ">= 0.0.0"},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
     ]
   end
