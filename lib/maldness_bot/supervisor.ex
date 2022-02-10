@@ -14,7 +14,7 @@ defmodule MaldnessBot.Supervisor do
       {Finch, name: MaldnessBot.Finch},
       MaldnessBot.TelegramAPI.API,
       MaldnessBot.AfkCache,
-      {Task.Supervisor, name: MaldnessBot.UpdatesTaskSupervisor},
+      {Task.Supervisor, name: MaldnessBot.UpdatesTaskSupervisor}
     ]
 
     Supervisor.init(children, strategy: :one_for_one)

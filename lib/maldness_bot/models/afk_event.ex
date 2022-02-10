@@ -3,7 +3,7 @@ defmodule MaldnessBot.Models.AfkEvent do
   import Ecto.Changeset
 
   types = %{
-      afk: 1,
+    afk: 1
   }
 
   @spec type(atom()) :: pos_integer()
@@ -16,11 +16,11 @@ defmodule MaldnessBot.Models.AfkEvent do
   def type(_event_type), do: 1
 
   schema "afk_events" do
-    field :started_at, :utc_datetime
-    field :ended_at, :utc_datetime
-    field :message, :string
-    field :event_type, :integer
-    belongs_to :user, MaldnessBot.Models.User
+    field(:started_at, :utc_datetime)
+    field(:ended_at, :utc_datetime)
+    field(:message, :string)
+    field(:event_type, :integer)
+    belongs_to(:user, MaldnessBot.Models.User)
   end
 
   def changeset(struct, params) do

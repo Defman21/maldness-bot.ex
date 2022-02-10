@@ -37,8 +37,8 @@ defmodule MaldnessBot.AfkCache do
 
   @impl GenServer
   def handle_cast({:insert, user_id, event_id}, table) do
-   table |> :ets.insert({user_id, event_id})
-   {:noreply, table}
+    table |> :ets.insert({user_id, event_id})
+    {:noreply, table}
   end
 
   @impl GenServer

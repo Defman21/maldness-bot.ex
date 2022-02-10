@@ -3,15 +3,15 @@ defmodule MaldnessBot.Models.User do
   import Ecto.Changeset
 
   schema "users" do
-      field :telegram_uid, :integer
-      field :is_paying, :boolean
-      field :latitude, :float
-      field :longitude, :float
-      field :first_name, :string
-      field :last_name, :string
-      field :username, :string
+    field(:telegram_uid, :integer)
+    field(:is_paying, :boolean)
+    field(:latitude, :float)
+    field(:longitude, :float)
+    field(:first_name, :string)
+    field(:last_name, :string)
+    field(:username, :string)
 
-      has_many :afk_events, MaldnessBot.Models.AfkEvent
+    has_many(:afk_events, MaldnessBot.Models.AfkEvent)
   end
 
   def changeset(struct, params) do
@@ -38,7 +38,8 @@ defmodule MaldnessBot.Models.User do
       username: from["username"],
       is_paying: false,
       latitude: nil,
-      longitude: nil,
-    } |> MaldnessBot.Repo.insert!()
+      longitude: nil
+    }
+    |> MaldnessBot.Repo.insert!()
   end
 end
