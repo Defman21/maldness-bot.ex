@@ -12,8 +12,8 @@ defmodule MaldnessBot.Updates.Server do
     DynamicSupervisor.init(strategy: :one_for_one)
   end
 
-  def handle_update(%{"update_id" => _} = update) do
-    update["chat"]["id"]
+  def handle_update(%{"update_id" => _, "message" => message} = update) do
+    message["chat"]["id"]
     |> get_worker_pid()
     |> Worker.handle_update(update)
   end
