@@ -11,6 +11,11 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/maldness_bot/updates/worker.ex:35
+#: lib/maldness_bot/updates/worker.ex:44
 msgid "%{user} woke up and said: %{message}"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/maldness_bot/commands/handlers/weather.ex:97
+msgid "%{city_name}: %{temperature} (feels like %{feels_like}), %{description}"
 msgstr ""

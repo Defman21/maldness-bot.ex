@@ -1,6 +1,7 @@
 defmodule MaldnessBot.Commands.Handlers.Weather do
   @base_url "https://api.openweathermap.org/data/2.5/weather"
   alias MaldnessBot.TelegramAPI.API
+  import MaldnessBot.Gettext
 
   defp format_weather(%{"id" => id, "description" => desc}) do
     group = div(id, 100)
@@ -89,24 +90,17 @@ defmodule MaldnessBot.Commands.Handlers.Weather do
       |> (fn {:ok, %Finch.Response{body: body}} -> body end).()
       |> Jason.decode!()
 
-    description = weather |> Enum.map(&format_weather/1) |> Enum.join(", ")
+    description = weather |> Enum.map_join(", ", &format_weather/1)
     temperature = format_temp(temperature)
     feels_like = format_temp(feels_like)
 
-    tpl =
-      Keyword.get(
-        open_weather,
-        :template,
-        "<%= city_name %>: <%= temperature %> (feels like <%= feels_like %>), <%= description %>"
-      )
-
     text =
-      EEx.eval_string(tpl,
+      gettext("%{city_name}: %{temperature} (feels like %{feels_like}), %{description}", %{
         city_name: city_name,
         temperature: temperature,
         feels_like: feels_like,
         description: description
-      )
+      })
 
     API.send_message(message["chat"]["id"], text)
   end
