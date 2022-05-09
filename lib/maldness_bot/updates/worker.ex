@@ -4,11 +4,12 @@ defmodule MaldnessBot.Updates.Worker do
   use GenServer
   alias MaldnessBot.Commands.Parser, as: CommandParser
   alias MaldnessBot.AfkCache
+  alias MaldnessBot.Models.Chat
 
   # Client API
 
   def start_link(chat_id) do
-    GenServer.start_link(__MODULE__, [], name: via_tuple(chat_id))
+    GenServer.start_link(__MODULE__, %{chat_id: chat_id}, name: via_tuple(chat_id))
   end
 
   def handle_update(pid, update) do
@@ -18,7 +19,9 @@ defmodule MaldnessBot.Updates.Worker do
   # Callback API
 
   @impl GenServer
-  def init(state) do
+  def init(%{chat_id: chat_id} = state) do
+    chat = Chat.get_or_create(chat_id)
+    _ = Gettext.put_locale(MaldnessBot.Gettext, chat.language)
     {:ok, state}
   end
 
