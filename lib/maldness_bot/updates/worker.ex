@@ -62,13 +62,14 @@ defmodule MaldnessBot.Updates.Worker do
 
     case CommandParser.parse_message(message) do
       {:ok, command, arg} ->
-        :ok = MaldnessBot.Commands.Executor.execute(command, arg, message)
+        case MaldnessBot.Commands.Executor.execute(command, arg, message) do
+          :ok -> {:noreply, state}
+          :restart -> {:stop, :normal, state}
+        end
 
       {:error, "no command in the message"} ->
-        nil
+        {:noreply, state}
     end
-
-    {:noreply, state}
   end
 
   @impl GenServer

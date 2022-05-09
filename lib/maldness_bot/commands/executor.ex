@@ -5,7 +5,7 @@ defmodule MaldnessBot.Commands.Executor do
     "afk" => MaldnessBot.Commands.Handlers.AfkEvent
   }
 
-  @spec execute(String.t(), String.t(), map()) :: :ok | {:error, binary()}
+  @spec execute(String.t(), String.t(), map()) :: :ok | :restart | {:error, binary()}
   def execute(command, arg, message) do
     case Map.fetch(@commands, command) do
       {:ok, handler} -> handler.handle(arg, message)
