@@ -33,7 +33,10 @@ defmodule MaldnessBot.Commands.Parser do
         {:ok, cmd, arg}
 
       true ->
-        bot_name = Application.fetch_env!(:maldness_bot, :name)
+        bot_name =
+          Application.fetch_env!(:maldness_bot, MaldnessBot.Telegram)
+          |> Keyword.fetch!(:username)
+
         {:ok, String.slice(cmd, 0..(-String.length(bot_name) - 1)), arg}
     end
   end

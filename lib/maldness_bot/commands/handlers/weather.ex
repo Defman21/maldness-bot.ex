@@ -62,7 +62,7 @@ defmodule MaldnessBot.Commands.Handlers.Weather do
   end
 
   def handle(arg, message) do
-    open_weather = Application.fetch_env!(:maldness_bot, OpenWeather)
+    open_weather = Application.fetch_env!(:maldness_bot, MaldnessBot.OpenWeather)
 
     url =
       URI.parse(@base_url)
@@ -71,7 +71,7 @@ defmodule MaldnessBot.Commands.Handlers.Weather do
         URI.encode_query(%{
           "units" => Keyword.get(open_weather, :units, "metric"),
           "appid" => Keyword.fetch!(open_weather, :key),
-          "lang" => Keyword.get(open_weather, :lang, "en"),
+          "lang" => Keyword.get(open_weather, :lang, "en"), # todo: use lang from chat
           "q" => arg
         })
       )

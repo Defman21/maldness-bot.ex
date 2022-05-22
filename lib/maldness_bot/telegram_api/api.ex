@@ -88,7 +88,10 @@ defmodule MaldnessBot.TelegramAPI.API do
   end
 
   defp bot_url do
-    token = Application.fetch_env!(:maldness_bot, :token)
+    token =
+      Application.fetch_env!(:maldness_bot, MaldnessBot.Telegram)
+      |> Keyword.fetch!(:token)
+
     URI.merge(@base_url, "/bot#{token}/") |> to_string()
   end
 
