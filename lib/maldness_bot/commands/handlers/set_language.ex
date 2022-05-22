@@ -3,7 +3,7 @@ defmodule MaldnessBot.Commands.Handlers.SetLanguage do
 
   alias MaldnessBot.Models.Chat
 
-  def handle(lang, %{"chat" => %{"id" => chat_id}}) when lang in ["ru", "en"] do
+  def handle(lang, %{"chat" => %{"id" => chat_id}}, _state) when lang in ["ru", "en"] do
     Chat.set_language(chat_id, lang)
     :restart
   end

@@ -61,7 +61,7 @@ defmodule MaldnessBot.Commands.Handlers.Weather do
     "#{sign}#{f_temp}"
   end
 
-  def handle(arg, message) do
+  def handle(arg, message, _state) do
     open_weather = Application.fetch_env!(:maldness_bot, MaldnessBot.OpenWeather)
 
     url =

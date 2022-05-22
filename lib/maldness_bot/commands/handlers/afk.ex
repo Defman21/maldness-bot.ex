@@ -5,7 +5,7 @@ defmodule MaldnessBot.Commands.Handlers.AfkEvent do
   alias MaldnessBot.TelegramAPI.API
   alias MaldnessBot.AfkCache
 
-  def handle(arg, %{"message_id" => mes_id, "from" => from, "chat" => chat}) do
+  def handle(arg, %{"message_id" => mes_id, "from" => from, "chat" => chat}, _state) do
     user =
       case User.get_by_telegram(from["id"]) do
         nil -> User.create_from_telegram(from)

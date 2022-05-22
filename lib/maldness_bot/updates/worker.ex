@@ -62,7 +62,7 @@ defmodule MaldnessBot.Updates.Worker do
 
     case CommandParser.parse_message(message) do
       {:ok, command, arg} ->
-        case MaldnessBot.Commands.Executor.execute(command, arg, message) do
+        case MaldnessBot.Commands.Executor.execute(command, arg, message, state) do
           :ok -> {:noreply, state}
           :restart -> {:stop, :normal, state}
         end

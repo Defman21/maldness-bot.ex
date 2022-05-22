@@ -6,10 +6,10 @@ defmodule MaldnessBot.Commands.Executor do
     "set_language" => MaldnessBot.Commands.Handlers.SetLanguage
   }
 
-  @spec execute(String.t(), String.t(), map()) :: :ok | :restart | {:error, binary()}
-  def execute(command, arg, message) do
+  @spec execute(String.t(), String.t(), map(), map()) :: :ok | :restart | {:error, binary()}
+  def execute(command, arg, message, state) do
     case Map.fetch(@commands, command) do
-      {:ok, handler} -> handler.handle(arg, message)
+      {:ok, handler} -> handler.handle(arg, message, state)
       :error -> {:error, "command not found"}
     end
   end
