@@ -60,7 +60,9 @@ defmodule MaldnessBot.TelegramAPI.API do
   @impl GenServer
   def handle_call({:get_chat_administrators, chat_id}, _from, state) do
     case req("getChatAdministrators", %{chat_id: chat_id}) do
-      {:ok, result} -> {:reply, result, state}
+      {:ok, result} ->
+        {:reply, result, state}
+
       {:error, "Bad Request: there are no administrators in the private chat"} ->
         {:reply, [%{"status" => "creator"}], state}
     end
