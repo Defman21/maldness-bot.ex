@@ -25,9 +25,20 @@ defmodule MaldnessBot.Models.User do
     |> MaldnessBot.Repo.insert!()
   end
 
-  @spec get_by_telegram(pos_integer()) :: __MODULE__ | nil
   def get_by_telegram(id) do
     __MODULE__ |> MaldnessBot.Repo.get_by(telegram_uid: id)
+  end
+
+  def set_location(user_id, latitude, longitude) do
+    case get_by_telegram(user_id) do
+      nil ->
+        :ok
+
+      user ->
+        user
+        |> changeset(%{latitude: latitude, longitude: longitude})
+        |> MaldnessBot.Repo.update!()
+    end
   end
 
   def create_from_telegram(from) do
