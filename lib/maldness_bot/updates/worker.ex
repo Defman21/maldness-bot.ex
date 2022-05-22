@@ -22,7 +22,7 @@ defmodule MaldnessBot.Updates.Worker do
   def init(%{chat_id: chat_id} = state) do
     chat = Chat.get_or_create(chat_id)
     _ = Gettext.put_locale(MaldnessBot.Gettext, chat.language)
-    {:ok, state}
+    {:ok, Map.put(state, :language, chat.language)}
   end
 
   defp format_user(%{"first_name" => first_name, "last_name" => last_name}),
