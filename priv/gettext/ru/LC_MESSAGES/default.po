@@ -12,11 +12,16 @@ msgstr ""
 "Plural-Forms: nplurals=3\n"
 
 #, elixir-autogen, elixir-format
-#: lib/maldness_bot/updates/worker.ex:44
+#: lib/maldness_bot/updates/worker.ex:47
 msgid "%{user} woke up and said: %{message}"
 msgstr "%{user} проснулся и сказал: %{message}"
 
 #, elixir-autogen, elixir-format
-#: lib/maldness_bot/commands/handlers/weather.ex:97
+#: lib/maldness_bot/commands/handlers/weather.ex:126
 msgid "%{city_name}: %{temperature} (feels like %{feels_like}), %{description}"
 msgstr "%{city_name}: %{temperature} (ощущается как %{feels_like}), %{description}"
+
+#, elixir-autogen, elixir-format, fuzzy
+#: lib/maldness_bot/commands/handlers/weather.ex:140
+msgid "Failed to get weather: no argument provided and you don't have a location set. Send a location and reply to it with /set_location."
+msgstr "Не удалось узнать погоду: аргумент не указан и у тебя нет установленной локации. Отправь локацию и ответом на нее /set_location."

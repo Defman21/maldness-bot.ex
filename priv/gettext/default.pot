@@ -11,11 +11,16 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/maldness_bot/updates/worker.ex:44
+#: lib/maldness_bot/updates/worker.ex:47
 msgid "%{user} woke up and said: %{message}"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/maldness_bot/commands/handlers/weather.ex:97
+#: lib/maldness_bot/commands/handlers/weather.ex:126
 msgid "%{city_name}: %{temperature} (feels like %{feels_like}), %{description}"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/maldness_bot/commands/handlers/weather.ex:140
+msgid "Failed to get weather: no argument provided and you don't have a location set. Send a location and reply to it with /set_location."
 msgstr ""
