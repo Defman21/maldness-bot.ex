@@ -69,6 +69,9 @@ defmodule MaldnessBot.Updates.Worker do
 
       {:error, "no command in the message"} ->
         {:noreply, state}
+
+      {:error, "not an admin"} ->
+        {:noreply, state}
     end
   end
 

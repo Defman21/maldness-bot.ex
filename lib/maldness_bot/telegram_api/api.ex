@@ -32,6 +32,10 @@ defmodule MaldnessBot.TelegramAPI.API do
     GenServer.cast(__MODULE__, :delete_webhook)
   end
 
+  def get_chat_administrators(chat_id) do
+    GenServer.call(__MODULE__, {:get_chat_administrators, chat_id})
+  end
+
   # Server API
 
   @impl GenServer
@@ -51,6 +55,15 @@ defmodule MaldnessBot.TelegramAPI.API do
     {:ok, result} = req("getUpdates", merge(opts, offset: offset, limit: limit))
 
     {:reply, result, state}
+  end
+
+  @impl GenServer
+  def handle_call({:get_chat_administrators, chat_id}, _from, state) do
+    case req("getChatAdministrators", %{chat_id: chat_id}) do
+      {:ok, result} -> {:reply, result, state}
+      {:error, "Bad Request: there are no administrators in the private chat"} ->
+        {:reply, [%{"status" => "creator"}], state}
+    end
   end
 
   @impl GenServer
