@@ -26,20 +26,39 @@ defmodule MaldnessBot.Commands.Handlers.Weather do
     end
   end
 
-  defp emoji(2, _), do: "⛈"
-  defp emoji(3, _), do: "🌧"
-  defp emoji(5, _), do: "🌧"
-  defp emoji(6, _), do: "🌨"
-  defp emoji(7, 11), do: "🔥💨"
-  defp emoji(7, 62), do: "🌋💨"
-  defp emoji(7, rem) when rem in [1, 21, 41], do: "🌫"
-  defp emoji(7, rem) when rem in [31, 51, 61], do: "🏜💨"
-  defp emoji(7, rem) when rem in [71, 81], do: "🌪"
-  defp emoji(8, 0), do: "☀️"
-  defp emoji(8, 1), do: "🌤"
-  defp emoji(8, 2), do: "⛅️"
-  defp emoji(8, 3), do: "🌥"
-  defp emoji(8, 4), do: "☁️"
+  emojis = [
+    {2, nil, "⛈"},
+    {3, nil, "🌧"},
+    {5, nil, "🌧"},
+    {6, nil, "🌨"},
+    {7, 11, "🔥💨"},
+    {7, 62, "🌋💨"},
+    {7, [1, 21, 41], "🌫"},
+    {7, [31, 51, 61], "🏜💨"},
+    {7, [71, 81], "🌪"},
+    {8, 0, "☀️"},
+    {8, 1, "🌤"},
+    {8, 2, "⛅️"},
+    {8, 3, "🌥"},
+    {8, 4, "☁️"}
+  ]
+
+  @spec emoji(pos_integer(), pos_integer() | list(pos_integer())) :: String.t()
+  defp emoji(group, rem)
+
+  for {group, rem, emoji} <- emojis do
+    case rem do
+      nil ->
+        defp emoji(unquote(group), _), do: unquote(emoji)
+
+      rem when not is_list(rem) ->
+        defp emoji(unquote(group), unquote(rem)), do: unquote(emoji)
+
+      rem_list ->
+        defp emoji(unquote(group), rem) when rem in unquote(rem_list), do: unquote(emoji)
+    end
+  end
+
   defp emoji(_, _), do: ""
 
   defp format_weather(%{"id" => id, "description" => desc}) do
