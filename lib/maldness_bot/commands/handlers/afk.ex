@@ -5,25 +5,41 @@ defmodule MaldnessBot.Commands.Handlers.AfkEvent do
   alias MaldnessBot.TelegramAPI.API
   alias MaldnessBot.AfkCache
 
-  def handle(arg, %{"message_id" => mes_id, "from" => from, "chat" => chat}, _state) do
-    user =
-      case User.get_by_telegram(from["id"]) do
-        nil -> User.create_from_telegram(from)
-        user -> user
-      end
+  def handle(arg, %{"from" => from, "chat" => chat}, %{command: command}) do
+    get_user(from)
+    |> create_event(arg, command)
+    |> save_to_cache()
+    |> send_message(chat, from)
+  end
 
-    event =
+  defp get_user(from) do
+    case User.get_by_telegram(from["id"]) do
+      nil -> User.create_from_telegram(from)
+      user -> user
+    end
+  end
+
+  defp create_event(user, message, command) do
+    {
       User.add_afk_event(user, %AfkEvent{
         started_at: DateTime.utc_now() |> DateTime.truncate(:second),
-        message: arg,
-        event_type: AfkEvent.type(:afk)
-      })
+        message: message,
+        event_type: AfkEvent.type(String.to_atom(command))
+      }),
+      user
+    }
+  end
 
-    Logger.debug("Created afk event #{event.id} for user #{user.id}")
-
+  defp save_to_cache({event, user}) do
     AfkCache.insert(user.telegram_uid, event.id)
+    event
+  end
 
-    API.send_message(chat["id"], "created afk event #{event.id}", reply_to: mes_id)
+  defp send_message(event, chat, from) do
+    API.send_message(
+      chat["id"],
+      AfkEvent.format_message(event, :in, from)
+    )
 
     :ok
   end

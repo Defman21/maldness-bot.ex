@@ -1,10 +1,9 @@
 defmodule MaldnessBot.Updates.Worker do
-  import MaldnessBot.Gettext
   require Logger
   use GenServer
   alias MaldnessBot.Commands.Parser, as: CommandParser
   alias MaldnessBot.AfkCache
-  alias MaldnessBot.Models.Chat
+  alias MaldnessBot.Models.{Chat, AfkEvent}
 
   # Client API
 
@@ -25,18 +24,18 @@ defmodule MaldnessBot.Updates.Worker do
     {:ok, Map.put(state, :language, chat.language)}
   end
 
-  defp format_user(%{"first_name" => first_name, "last_name" => last_name}),
-    do: "#{first_name} #{last_name}"
-
-  defp format_user(%{"first_name" => first_name}), do: first_name
-
-  defp process_afk_event(%{
-         "message_id" => message_id,
-         "chat" => %{"id" => chat_id},
-         "from" => %{"id" => user_id} = from
-       }) do
+  defp process_afk_event(
+         %{
+           "message_id" => message_id,
+           "chat" => %{"id" => chat_id},
+           "from" => %{"id" => user_id} = from
+         },
+         lang
+       ) do
     {:ok, _} =
       Task.Supervisor.start_child(MaldnessBot.UpdatesTaskSupervisor, fn ->
+        _ = Gettext.put_locale(MaldnessBot.Gettext, lang)
+
         with event_id when is_integer(event_id) <- AfkCache.get(user_id) do
           AfkCache.delete(user_id)
 
@@ -44,10 +43,7 @@ defmodule MaldnessBot.Updates.Worker do
 
           MaldnessBot.TelegramAPI.API.send_message(
             chat_id,
-            gettext("%{user} woke up and said: %{message}", %{
-              user: format_user(from),
-              message: event.message
-            }),
+            AfkEvent.format_message(event, :out, from),
             reply_to_message_id: message_id
           )
         end
@@ -58,7 +54,7 @@ defmodule MaldnessBot.Updates.Worker do
 
   @impl GenServer
   def handle_cast({:handle_update, %{"message" => message}}, state) do
-    :ok = process_afk_event(message)
+    :ok = process_afk_event(message, state.language)
 
     case CommandParser.parse_message(message) do
       {:ok, command, arg} ->

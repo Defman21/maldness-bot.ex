@@ -3,6 +3,8 @@ defmodule MaldnessBot.Commands.Executor do
     "up" => [handler: MaldnessBot.Commands.Handlers.Up, admin_only: false],
     "weather" => [handler: MaldnessBot.Commands.Handlers.Weather, admin_only: false],
     "afk" => [handler: MaldnessBot.Commands.Handlers.AfkEvent, admin_only: false],
+    "sleep" => [handler: MaldnessBot.Commands.Handlers.AfkEvent, admin_only: false],
+    "work" => [handler: MaldnessBot.Commands.Handlers.AfkEvent, admin_only: false],
     "set_language" => [handler: MaldnessBot.Commands.Handlers.SetLanguage, admin_only: true],
     "set_location" => [handler: MaldnessBot.Commands.Handlers.SetLocation, admin_only: false]
   }
