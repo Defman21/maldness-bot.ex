@@ -14,7 +14,9 @@ defmodule MaldnessBot.Commands.Executor do
   def execute(command, arg, message, state) do
     case Map.fetch(@commands, command) do
       {:ok, handler: handler, admin_only: admin_only} ->
-        handle_call(handler, arg, message, state, admin_only: admin_only)
+        handle_call(handler, arg, message, Map.put(state, :command, command),
+          admin_only: admin_only
+        )
 
       :error ->
         {:error, "command not found"}
